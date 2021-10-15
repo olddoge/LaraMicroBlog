@@ -11,6 +11,8 @@
 
 <div class="container">
     <div class="offset-md-1 col-md-10">
+        {{--引入提示信息--}}
+        @include('shared._message')
         @yield('content')
         {{-- 引入局部视图 footer --}}
         @include('layouts._footer')
