@@ -20,12 +20,22 @@ class UsersController extends Controller
         // 使用中间件验证权限，是否登陆，没登录不能访问某些页面
         // 除了 show，create，store 不需要验证
         $this->middleware('auth', [
-            'except' => ['show', 'create', 'store']
+            'except' => ['show', 'create', 'store', 'index']
         ]);
         // 只让未注册的用户访问 create
         $this->middleware('guest', [
             'only' => ['create']
         ]);
+    }
+
+    /**
+     * 展示用户列表
+     * @return Application|Factory|View
+     */
+    public function index()
+    {
+        $users = User::all();
+        return view('users.index', compact('users'));
     }
 
     /**

@@ -5,7 +5,7 @@
             @if (Auth::check())
                 {{--如果登陆了，导航栏显示这些菜单--}}
                 <li class="nav-item">
-                    <a class="nav-link" href="#">用户列表</a>
+                    <a class="nav-link" href="{{route('users.index')}}">用户列表</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
