@@ -1,12 +1,16 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400"></a></p>
-
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
 
 ## 基于 Laravel 6.2 的微博站点（学习用）
 
 基于 Laravel 6.2 构建仿微博的 WEB 应用，主要记录学习过程
+
+涉及到 Laravel 下列知识点
+
+- 控制器的创建、视图的创建
+- 控制器和视图的调用关系
+- 通用视图和局部视图
+- 命名路由和资源路由
+- Laravel Mix 前端工作流
+- Eloquent 模型的使用、模型关联关系
+- Laravel 认证机制和策略
+- Faker 扩展包填充假数据
+- 邮件验证功能
