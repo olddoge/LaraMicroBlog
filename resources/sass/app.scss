@@ -63,3 +63,14 @@ section.user_info {
   max-width: 50px;
   border-radius: 50%;
 }
+
+// 编辑视图样式调整
+.gravatar_edit {
+  margin: 15px auto;
+  text-align: center;
+
+  .gravatar {
+    float: none;
+    max-width: 100px;
+  }
+}

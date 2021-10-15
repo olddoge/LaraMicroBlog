@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -13,6 +14,20 @@ use Illuminate\View\View;
  */
 class UsersController extends Controller
 {
+
+    public function __construct()
+    {
+        // 使用中间件验证权限，是否登陆，没登录不能访问某些页面
+        // 除了 show，create，store 不需要验证
+        $this->middleware('auth', [
+            'except' => ['show', 'create', 'store']
+        ]);
+        // 只让未注册的用户访问 create
+        $this->middleware('guest', [
+            'only' => ['create']
+        ]);
+    }
+
     /**
      * 注册视图
      * @return Application|Factory|View
@@ -56,5 +71,46 @@ class UsersController extends Controller
         session()->flash('success', $success_tips);
         // 最后重定向回 show 视图
         return redirect()->route('users.show', [$user]);
+    }
+
+    /**
+     * 编辑视图
+     * @param User $user
+     * @return Application|Factory|View
+     */
+    public function edit(User $user)
+    {
+        // 指定策略
+        // update - 指策略中的方法名
+        // $user 对应传参策略方法中的第二个参数
+        $this->authorize('update', $user);
+        return view('users.edit', compact('user'));
+    }
+
+    /**
+     * 更新用户信息
+     * @param User    $user
+     * @param Request $request
+     * @return RedirectResponse
+     */
+    public function update(User $user, Request $request)
+    {
+        $this->authorize('update', $user);
+        // 对请求进行验证
+        $rules = [
+            'name'     => 'required|max:50',
+            'password' => 'nullable|confirmed|min:6'
+        ];
+        $this->validate($request, $rules);
+        // 更新数据库
+        $data = ['name' => $request->name];
+        if ($request->password) {
+            // 有更新密码才加入
+            $data['password'] = bcrypt($request->password);
+        }
+        $user->update($data);
+        $tips = '个人资料更新成功！';
+        session()->flash('success', $tips);
+        return redirect()->route('users.show', $user->id);
     }
 }

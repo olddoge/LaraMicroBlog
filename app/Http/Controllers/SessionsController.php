@@ -14,6 +14,14 @@ use Illuminate\View\View;
  */
 class SessionsController extends Controller
 {
+    public function __construct()
+    {
+        // create 方法只让未注册的用户访问
+        $this->middleware('guest', [
+            'only' => ['create']
+        ]);
+    }
+
     /**
      * 登陆视图
      * @return Application|Factory|View
@@ -40,7 +48,8 @@ class SessionsController extends Controller
             // 登陆成功
             $tips = '欢迎回来！';
             session()->flash('success', $tips);
-            return redirect()->route('users.show', [\Auth::user()]);
+            $fallback = route('users.show', \Auth::user());
+            return redirect()->intended($fallback);
         } else {
             // 登陆失败
             $tips = '很抱歉，您的邮箱和密码不匹配';
