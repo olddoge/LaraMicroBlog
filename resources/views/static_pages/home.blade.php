@@ -10,7 +10,7 @@
         </p>
         <p> The PHP Framework for Web Artisans </p>
         <p>
-            <a class="btn btn-lg btn-success" href="#" role="button">现在注册</a>
+            <a class="btn btn-lg btn-success" href="{{route('signup')}}" role="button">现在注册</a>
         </p>
     </div>
 @stop
