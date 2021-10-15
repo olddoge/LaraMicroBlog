@@ -123,4 +123,18 @@ class UsersController extends Controller
         session()->flash('success', $tips);
         return redirect()->route('users.show', $user->id);
     }
+
+    /**
+     * 删除用户
+     * @param User $user
+     * @return RedirectResponse
+     * @throws \Exception
+     */
+    public function destroy(User $user)
+    {
+        $this->authorize('destroy', $user);
+        $user->delete();
+        session()->flash('success', '成功删除用户！');
+        return back();
+    }
 }

@@ -19,4 +19,15 @@ class UserPolicy
     {
         return $currentUser->id === $user->id;
     }
+
+    /**
+     * 删除用户策略，必须是管理员，并且删除的不是自身
+     * @param User $currentUser
+     * @param User $user
+     * @return bool
+     */
+    public function destroy(User $currentUser, User $user)
+    {
+        return $currentUser->is_admin && $currentUser->id !== $user->id;
+    }
 }
