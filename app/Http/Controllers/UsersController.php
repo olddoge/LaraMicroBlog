@@ -8,6 +8,8 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Mail;
+use Auth;
 
 /**
  * 用户相关控制器
@@ -20,7 +22,7 @@ class UsersController extends Controller
         // 使用中间件验证权限，是否登陆，没登录不能访问某些页面
         // 除了 show，create，store 不需要验证
         $this->middleware('auth', [
-            'except' => ['show', 'create', 'store', 'index']
+            'except' => ['show', 'create', 'store', 'index', 'confirmEmail']
         ]);
         // 只让未注册的用户访问 create
         $this->middleware('guest', [
@@ -76,11 +78,11 @@ class UsersController extends Controller
             'email'    => $request->email,
             'password' => bcrypt($request->password),
         ]);
-        // 增加一个成功信息的提示
-        $success_tips = '欢迎，您将在这里开启一段新的旅程~';
-        session()->flash('success', $success_tips);
-        // 最后重定向回 show 视图
-        return redirect()->route('users.show', [$user]);
+        // 发送确认邮件
+        $this->sendEmailConfirmationTo($user);
+        $tips = '验证邮件已发送到你的注册邮箱上，请注意查收。';
+        session()->flash('success', $tips);
+        return redirect('/');
     }
 
     /**
@@ -136,5 +138,38 @@ class UsersController extends Controller
         $user->delete();
         session()->flash('success', '成功删除用户！');
         return back();
+    }
+
+    /**
+     * 发送确认邮件
+     * @param $user
+     */
+    protected function sendEmailConfirmationTo($user)
+    {
+        $view = 'emails.confirm';
+        $data = compact('user');
+        $to = $user->email;
+        $subject = "感谢注册！请确认你的邮箱。";
+        Mail::send($view, $data, function ($message) use ($to, $subject) {
+            $message->to($to)->subject($subject);
+        });
+    }
+
+    /**
+     * 激活确认
+     * @param $token
+     * @return RedirectResponse
+     */
+    public function confirmEmail($token)
+    {
+        $user = User::where('activation_token', $token)->firstOrFail();
+
+        $user->activated = true;
+        $user->activation_token = null;
+        $user->save();
+
+        Auth::login($user);
+        session()->flash('success', '恭喜你，激活成功！');
+        return redirect()->route('users.show', [$user]);
     }
 }

@@ -24,3 +24,10 @@ Route::resource('users', 'UsersController');
 Route::get('login', 'SessionsController@create')->name('login');    // 登陆的页面
 Route::post('login', 'SessionsController@store')->name('login');    // 登陆操作的处理
 Route::delete('logout', 'SessionsController@destroy')->name('logout');  // 登出
+// 邮件激活路由
+Route::get('signup/confirm/{token}', 'UsersController@confirmEmail')->name('confirm_email');
+// 重设密码
+Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
+Route::post('password/email', 'Auth\ForgotPasswordController@sendResetLinkEmail')->name('password.email');
+Route::get('password/reset/{token}', 'Auth\ResetPasswordController@showResetForm')->name('password.reset');
+Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('password.update');

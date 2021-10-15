@@ -8,6 +8,7 @@ use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Redirector;
 use Illuminate\View\View;
+use Auth;
 
 /**
  * 会话管理控制器
@@ -44,12 +45,21 @@ class SessionsController extends Controller
         ]);
         // attempt 方法根据数组中的 email 查找数据，然后用 password 匹配数据库是否一致
         // 第二个参数为是否记住用户
-        if (\Auth::attempt($credentials, $request->has('remember'))) {
+        if (Auth::attempt($credentials, $request->has('remember'))) {
             // 登陆成功
-            $tips = '欢迎回来！';
-            session()->flash('success', $tips);
-            $fallback = route('users.show', \Auth::user());
-            return redirect()->intended($fallback);
+            if (Auth::user()->activated) {
+                // 账号已经激活
+                $tips = '欢迎回来！';
+                session()->flash('success', $tips);
+                $fallback = route('users.show', \Auth::user());
+                return redirect()->intended($fallback);
+            } else {
+                // 账号未激活
+                Auth::logout();
+                $tips = '你的账号未激活，请检查邮箱中的注册邮件进行激活。';
+                session()->flash('warning', $tips);
+                return redirect('/');
+            }
         } else {
             // 登陆失败
             $tips = '很抱歉，您的邮箱和密码不匹配';
