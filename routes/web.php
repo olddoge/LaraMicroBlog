@@ -18,3 +18,6 @@ Route::get('/about', 'StaticPagesController@about')->name('about');
 
 // 用户注册
 Route::get('signup', 'UsersController@create')->name('signup');
+// 生成用户注册相关的资源路由
+// 资源路由遵从 RESTful 架构，包含（GET，POST，PATCH，DELETE）
+Route::resource('users', 'UsersController');

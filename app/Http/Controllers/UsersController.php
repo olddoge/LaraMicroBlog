@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
@@ -19,5 +20,15 @@ class UsersController extends Controller
     public function create()
     {
         return view('users.create');
+    }
+
+    /**
+     * @param User $user 用户模型
+     * @return Application|Factory|View
+     */
+    public function show(User $user)
+    {
+        // compact('user') 等价于 ['user' => $user]
+        return view('users.show', compact('user'));
     }
 }
