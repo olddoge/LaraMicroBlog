@@ -6,6 +6,7 @@ use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Auth;
 
 class StaticPagesController extends Controller
 {
@@ -16,7 +17,11 @@ class StaticPagesController extends Controller
      */
     public function home()
     {
-        return view('static_pages.home');
+        $feed_items = [];
+        if (Auth::check()) {
+            $feed_items = Auth::user()->feed()->paginate(10);
+        }
+        return view('static_pages/home', compact('feed_items'));
     }
 
     /**

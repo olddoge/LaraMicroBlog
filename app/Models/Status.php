@@ -6,6 +6,12 @@ use Illuminate\Database\Eloquent\Model;
 
 class Status extends Model
 {
+    /**
+     * 允许可写字段,未指定都不可写，都被保护
+     * @var string[]
+     */
+    protected $fillable = ['content'];
+
     public function user()
     {
         // 微博关系 - 多个微博对应一个用户
