@@ -78,7 +78,7 @@ class User extends Authenticatable
      * 粉丝列表
      * @return BelongsToMany
      */
-    public function follower()
+    public function followers()
     {
         // 多对多关系
         return $this->belongsToMany(User::Class, 'followers', 'user_id', 'follower_id');
